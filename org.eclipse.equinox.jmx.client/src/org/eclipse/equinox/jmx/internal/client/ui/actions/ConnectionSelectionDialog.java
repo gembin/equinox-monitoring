@@ -10,13 +10,12 @@
  *******************************************************************************/
 package org.eclipse.equinox.jmx.internal.client.ui.actions;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.Iterator;
-import java.util.Map;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXServiceURL;
-import org.eclipse.equinox.jmx.client.IJMXConnectorProvider;
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
+import org.eclipse.equinox.jmx.client.JMXServiceDescriptor;
 import org.eclipse.equinox.jmx.common.JMXConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -35,92 +34,142 @@ public class ConnectionSelectionDialog extends SelectionDialog {
 	private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
 	private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
 
+	private JMXServiceDescriptor connection;
 	private JMXConnector connector;
 
-	private Text hostText, portText;
+	private Text nameText, hostText, portText, serviceNameText;
 	private Combo transport;
-	private Shell parent;
-	private final Map transports;
+	private Composite parentComposite;
 
-	public ConnectionSelectionDialog(Shell parentShell, Map transports) {
+	public ConnectionSelectionDialog(Shell parentShell) {
 		super(parentShell);
-		this.transports = transports;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.SelectionDialog#configureShell(org.eclipse.swt.widgets.Shell)
-	 */
+	public JMXConnector getJMXConnector() {
+		return connector;
+	}
+
+	public JMXServiceDescriptor getJMXServiceDescriptor() {
+		return connection;
+	}
+
+	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText(ActionMessages.connection_selection_dialog_title);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
-	 */
+	@Override
 	protected Control createDialogArea(final Composite parent) {
-		this.parent = parent.getShell();
-		Composite composite = (Composite) super.createDialogArea(parent);
-		Font font = parent.getFont();
+		final Composite composite = (Composite) super.createDialogArea(parent);
+
+		parentComposite = parent;
+
+		final Font font = parent.getFont();
 		composite.setFont(font);
 
 		createMessageArea(composite);
 
-		GridData data = new GridData(GridData.FILL_BOTH);
-		data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
-		data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
+		gridData.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
 
-		Composite fieldComposite = new Composite(composite, SWT.NULL);
-		fieldComposite.setLayout(new GridLayout(5, false));
-		// 1 host label
+		final Composite fieldComposite = new Composite(composite, SWT.NULL);
+		fieldComposite.setLayout(new GridLayout(2, false));
+
+		// Connection name: label
 		Label label = new Label(fieldComposite, SWT.CENTER);
+		label.setText(ActionMessages.connection_name);
+
+		// Connection name: text entry
+		nameText = new Text(fieldComposite, SWT.BORDER);
+		nameText.setText(ActionMessages.new_jmx_connection);
+		nameText.selectAll();
+
+		gridData = new GridData();
+		gridData.widthHint = convertWidthInCharsToPixels(25);
+		nameText.setLayoutData(gridData);
+
+		// host: label
+		label = new Label(fieldComposite, SWT.CENTER);
 		label.setText(ActionMessages.host);
-		// 2 host text entry
+
+		// host: text entry
 		hostText = new Text(fieldComposite, SWT.BORDER);
-		hostText.setText("localhost");
-		hostText.selectAll();
-		data = new GridData();
-		data.widthHint = convertWidthInCharsToPixels(25);
-		hostText.setLayoutData(data);
-		// 3 port label
+		hostText.setText("localhost"); //$NON-NLS-1$
+
+		gridData = new GridData();
+		gridData.widthHint = convertWidthInCharsToPixels(25);
+		hostText.setLayoutData(gridData);
+
+		// port: label
 		label = new Label(fieldComposite, SWT.CENTER);
 		label.setText(ActionMessages.port);
-		// 4 port text entry
+
+		// port: text entry
 		portText = new Text(fieldComposite, SWT.BORDER);
 		portText.setTextLimit(5);
 		portText.setText(JMXConstants.DEFAULT_PORT);
-		data = new GridData();
-		data.widthHint = convertWidthInCharsToPixels(6);
-		portText.setLayoutData(data);
-		// 5 protocol selection combo box
+
+		gridData = new GridData();
+		gridData.widthHint = convertWidthInCharsToPixels(7);
+		portText.setLayoutData(gridData);
+
+		// service name: label
+		label = new Label(fieldComposite, SWT.CENTER);
+		label.setText(ActionMessages.jmx_service_name);
+
+		// service name: text entry
+		serviceNameText = new Text(fieldComposite, SWT.BORDER);
+		serviceNameText.setText(JMXConstants.DEFAULT_DOMAIN);
+
+		gridData = new GridData();
+		gridData.widthHint = convertWidthInCharsToPixels(25);
+		serviceNameText.setLayoutData(gridData);
+
+		// protocol selection: label
+		label = new Label(fieldComposite, SWT.CENTER);
+		label.setText(ActionMessages.jmx_protocol);
+
+		// protocol selection: combo box
 		transport = new Combo(fieldComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+
 		// add transport provided as extensions to supported list
-		Iterator iter = transports.keySet().iterator();
+		final Iterator iter = JMXClientPlugin.getDefault()
+								.getJMXTransportRegistry().getConnectorNames()
+								.iterator();
 		while (iter.hasNext()) {
 			transport.add((String) iter.next());
 		}
 		transport.select(0);
+
 		return composite;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
-	 */
+	@Override
 	protected void okPressed() {
-		if (hostText.getText().equals("")) { //$NON-NLS-1$
-			MessageDialog.openError(parent.getShell(), ActionMessages.error_message, ActionMessages.invalid_host);
+		if (nameText.getText().equals("")) { //$NON-NLS-1$
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_name);
 			return;
 		}
+
+		if (hostText.getText().equals("")) { //$NON-NLS-1$
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_host);
+			return;
+		}
+
 		try {
 			InetAddress.getByName(hostText.getText());
 		} catch (UnknownHostException e) {
-			MessageDialog.openError(parent.getShell(), ActionMessages.error_message, ActionMessages.invalid_host);
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_host);
 			return;
 		}
+
 		if (portText.getText().equals("")) { //$NON-NLS-1$
-			MessageDialog.openError(parent.getShell(), ActionMessages.error_message, ActionMessages.invalid_port);
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_port);
 			return;
 		}
+
 		int port;
 		try {
 			port = Integer.parseInt(portText.getText());
@@ -128,22 +177,47 @@ public class ConnectionSelectionDialog extends SelectionDialog {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {
-			MessageDialog.openError(parent.getShell(), ActionMessages.error_message, ActionMessages.invalid_port);
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_port);
 			return;
 		}
-		try {
-			IJMXConnectorProvider ctorp = (IJMXConnectorProvider) transports.get(transport.getText());
-			JMXServiceURL url = ctorp.getJMXServiceURL(hostText.getText(), port, transport.getText(), JMXConstants.DEFAULT_DOMAIN);
-			connector = ctorp.newJMXConnector(url, null);
-		} catch (Exception e) {
-			MessageDialog.openError(null, ActionMessages.error_message, e.getMessage());
-			super.cancelPressed();
-			return;
-		}
-		super.okPressed();
-	}
 
-	public JMXConnector getJMXConnector() {
-		return connector;
+		if (serviceNameText.getText().equals("")) { //$NON-NLS-1$
+			MessageDialog.openError(parentComposite.getShell(), ActionMessages.error_message, ActionMessages.invalid_jmx_service_name);
+			return;
+		}
+
+
+		try {
+			final JMXServiceURL url = new JMXServiceURL(
+					transport.getText(),
+					hostText.getText(),
+					port,
+					"/" + serviceNameText.getText()); //$NON-NLS-1$
+
+			connection =
+				new JMXServiceDescriptor(
+						nameText.getText(),
+						url,
+						null,
+						null);
+		} catch (MalformedURLException e) {
+			MessageDialog.openError(null, ActionMessages.error_message, e.getMessage());
+
+			super.cancelPressed();
+
+			return;
+		}
+
+		connector = JMXClientPlugin.getDefault()
+						.getJMXTransportRegistry().getJMXConnector(connection);
+		if(connector == null) {
+			MessageDialog.openError(null, ActionMessages.error_message, ActionMessages.unable_create_connector);
+
+			super.cancelPressed();
+
+			return;
+		}
+
+		super.okPressed();
 	}
 }

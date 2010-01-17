@@ -14,6 +14,5 @@ public final class JMXConstants {
 	public static final String DEFAULT_DOMAIN = "jmxserver"; //$NON-NLS-1$
 	public static final String DEFAULT_PORT = "8118"; //$NON-NLS-1$
 	public static final String DEFAULT_PROTOCOL = "rmi"; //$NON-NLS-1$
-	//	public static final String DEFAULT_PROTOCOL = "xmlrpc"; //$NON-NLS-1$
 	public static final int DEFAULT_PORT_AS_INT = Integer.parseInt(DEFAULT_PORT);
 }

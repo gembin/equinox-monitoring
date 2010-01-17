@@ -18,14 +18,12 @@ import org.eclipse.ui.IPerspectiveFactory;
  */
 public class ClientPerspectiveFactory implements IPerspectiveFactory {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
-	 */
 	public void createInitialLayout(IPageLayout layout) {
 		layout.setEditorAreaVisible(false);
 
 		layout.addView(ClientUI.VIEWID_CONTRIBUTIONS, IPageLayout.LEFT, 0.3f, layout.getEditorArea());
-		layout.addView(ClientUI.VIEWID_MBEANINFO, IPageLayout.TOP, 0.75f, layout.getEditorArea());
-		layout.addView(ClientUI.VIEWID_INVOCATION, IPageLayout.BOTTOM, 0.25f, layout.getEditorArea());
+		layout.addView(ClientUI.VIEWID_JMXSERVERS, IPageLayout.TOP, 0.1f, layout.getEditorArea());
+		layout.addView(ClientUI.VIEWID_MBEANINFO, IPageLayout.TOP, 0.6f, layout.getEditorArea());
+		layout.addView(ClientUI.VIEWID_INVOCATION, IPageLayout.BOTTOM, 0.3f, layout.getEditorArea());
 	}
 }

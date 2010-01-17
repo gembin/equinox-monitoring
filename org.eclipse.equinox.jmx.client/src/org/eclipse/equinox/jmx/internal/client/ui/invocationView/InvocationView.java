@@ -10,11 +10,12 @@
  *******************************************************************************/
 package org.eclipse.equinox.jmx.internal.client.ui.invocationView;
 
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
+
 import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import org.eclipse.equinox.jmx.common.ContributionProxy;
 import org.eclipse.equinox.jmx.common.util.MBeanUtils;
-import org.eclipse.equinox.jmx.internal.client.Activator;
 import org.eclipse.equinox.jmx.internal.client.MBeanServerProxy;
 import org.eclipse.equinox.jmx.internal.client.ui.ClientUI;
 import org.eclipse.equinox.jmx.internal.client.ui.contributionsview.ContributionsViewPart;
@@ -208,7 +209,7 @@ public class InvocationView extends ViewPart implements ISelectionListener {
 					}
 				}
 			} catch (Exception e) {
-				Activator.logError(e);
+				JMXClientPlugin.logError(e);
 				MessageDialog.openError(null, MBeanInfoViewMessages.error, e.getMessage());
 			}
 		}

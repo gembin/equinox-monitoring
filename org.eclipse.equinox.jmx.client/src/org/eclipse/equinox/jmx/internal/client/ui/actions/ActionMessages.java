@@ -24,15 +24,22 @@ public class ActionMessages extends NLS {
 	public static String error_message;
 	public static String info_message;
 	public static String local_mbean_server;
+	public static String connection_name;
+	public static String new_jmx_connection;
 	public static String host;
 	public static String port;
+	public static String jmx_service_name;
+	public static String jmx_protocol;
+	public static String invalid_name;
 	public static String invalid_host;
 	public static String invalid_port;
+	public static String invalid_jmx_service_name;
 	public static String no_url_selected;
 	public static String add_jmx_service_url;
 	public static String url_exists;
 	public static String remove_jmx_service_url;
 	public static String connect_host;
+	public static String unable_create_connector;
 	public static String connection_selection_dialog_title;
 	public static String no_transports_available;
 

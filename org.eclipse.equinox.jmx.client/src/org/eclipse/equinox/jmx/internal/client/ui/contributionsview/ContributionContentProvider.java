@@ -13,8 +13,8 @@ package org.eclipse.equinox.jmx.internal.client.ui.contributionsview;
 import java.io.IOException;
 import java.util.*;
 import javax.management.*;
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
 import org.eclipse.equinox.jmx.common.*;
-import org.eclipse.equinox.jmx.internal.client.Activator;
 import org.eclipse.equinox.jmx.internal.client.MBeanServerProxy;
 import org.eclipse.equinox.jmx.internal.client.ui.ClientUI;
 import org.eclipse.equinox.jmx.internal.client.ui.mbeaninfoview.MBeanInfoViewPart;
@@ -29,8 +29,8 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 
 	private static final Object[] NO_CHILDS = new Object[0];
 	private MBeanServerProxy serverProxy;
-	private TreeViewer viewer;
-	private Hashtable objNameProxies = new Hashtable();
+	protected final TreeViewer viewer;
+	protected final Hashtable objNameProxies = new Hashtable();
 
 	/**
 	 * Allocate and a <code>ContributionContentProvider</code>.
@@ -66,13 +66,13 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 					return ret;
 				}
 			} catch (Exception e) {
-				Activator.logError(e);
+				JMXClientPlugin.logError(e);
 			}
 		} else if (parentElement instanceof ContributionProxy[]) {
 			try {
 				monitorProxies((ContributionProxy[]) parentElement);
 			} catch (Exception e) {
-				Activator.logError(e);
+				JMXClientPlugin.logError(e);
 			}
 			return (ContributionProxy[]) parentElement;
 		}
@@ -95,7 +95,7 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 				ContributionProxy[] contribs = ((ContributionProxy) element).getChildContributions(serverProxy.getMBeanServerConnection());
 				return (contribs != null && contribs.length > 0);
 			} catch (Exception e) {
-				Activator.logError(e);
+				JMXClientPlugin.logError(e);
 			}
 		}
 		return false;
@@ -110,7 +110,7 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 			try {
 				monitorProxies(new ContributionProxy[] {rc});
 			} catch (Exception e) {
-				Activator.log(e);
+				JMXClientPlugin.log(e);
 			}
 			return getChildren(rc.queryRootContributions());
 		}
@@ -121,12 +121,14 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	public void dispose() {
+		// Intentionally left blank
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// Intentionally left blank
 	}
 
 	/* (non-Javadoc)
@@ -155,7 +157,7 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 							objNameProxies.remove(((RootContribution) viewer.getInput()).getObjectName());
 							viewer.setInput(serverProxy.getRootContribution());
 						} catch (Exception e) {
-							Activator.log(e);
+							JMXClientPlugin.log(e);
 						}
 						return;
 					}
@@ -168,7 +170,7 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 							viewer.update(proxy, null);
 							viewer.refresh(proxy);
 						} catch (Exception e) {
-							Activator.log(e);
+							JMXClientPlugin.log(e);
 						}
 					}
 				}
@@ -221,7 +223,7 @@ public class ContributionContentProvider implements ITreeContentProvider, Notifi
 				serverProxy.getMBeanServerConnection().removeNotificationListener(name, this);
 			}
 		} catch (Exception e) {
-			Activator.log(e);
+			JMXClientPlugin.log(e);
 		}
 	}
 }

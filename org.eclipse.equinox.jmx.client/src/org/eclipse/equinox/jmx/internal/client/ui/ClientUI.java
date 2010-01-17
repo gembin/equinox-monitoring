@@ -15,17 +15,18 @@ package org.eclipse.equinox.jmx.internal.client.ui;
  * This class provides static methods and fields only; it is not intended to be
  * instantiated or subclassed by clients.
  * </p>
- * 
+ *
  * @since 1.0
  */
 public final class ClientUI {
 
 	// disallow instantiations
 	private ClientUI() {
-		super();
+		throw new AssertionError("Cannot instantiate " + ClientUI.class.getName());
 	}
 
 	//view ids
+	public static final String VIEWID_JMXSERVERS = "org.eclipse.equinox.jmx.client.ui.jmxserversView"; //$NON-NLS-1$
 	public static final String VIEWID_CONTRIBUTIONS = "org.eclipse.equinox.jmx.client.ui.contributionsview"; //$NON-NLS-1$
 	public static final String VIEWID_MBEANINFO = "org.eclipse.equinox.jmx.client.ui.mbeaninfoview"; //$NON-NLS-1$
 	public static final String VIEWID_INVOCATION = "org.eclipse.equinox.jmx.client.ui.invocationView"; //$NON-NLS-1$

@@ -12,35 +12,7 @@
             name="%clientPerspectiveName"/>
    </extension>
    <!-- Perspective extensions -->
-    <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.eclipse.equinox.jmx.client.ui.ClientPerspectiveFactory">
-    	 	 <!-- Load perspective specific action set -->
-         <actionSet id="org.eclipse.equinox.jmx.client.ui.actions.ClientActionSet"/>
-      </perspectiveExtension>
-   </extension>
    <!-- UI Action sets -->
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            description="Manage JMX Connections"
-            id="org.eclipse.equinox.jmx.client.ui.actions.ClientActionSet"
-            label="%connectionActionSet"
-            visible="false">
-         <menu
-               id="jmxclient.main"
-               label="%connectionMenu"
-               path="additions">
-            <separator name="group1"/>
-         </menu>
-         <action
-               class="org.eclipse.equinox.jmx.internal.client.ui.actions.NewConnectionAction"
-               id="org.eclipse.equinox.jmx.client.ui.actions.NewConnectionAction"
-               label="%newConnectionAction"
-               menubarPath="jmxclient.main/group1"
-               style="push"/>
-      </actionSet>
-   </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -62,6 +34,74 @@
             icon="icons/perspective.gif"
             id="org.eclipse.equinox.jmx.client.ui.invocationView"
             name="Invocation View"/>
+      <view
+            allowMultiple="false"
+            class="org.eclipse.equinox.jmx.internal.client.ui.jmxserversview.JmxServersView"
+            icon="icons/perspective.gif"
+            id="org.eclipse.equinox.jmx.client.ui.jmxserversView"
+            name="JMX Servers View"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.equinox.jmx.ui.jmxContributionActionMenu"
+            objectClass="org.eclipse.equinox.jmx.common.ContributionProxy">
+         <action
+               class="info.evanchik.eclipse.karaf.ui.Action1"
+               id="org.eclipse.equinox.jmx.ui.defaultViewAction"
+               label="&amp;View">
+         </action>
+         <menu
+               id="jmxclient.ui.viewAs"
+               label="View &amp;As">
+            <groupMarker
+                  name="viewAsGroup">
+            </groupMarker>
+            <separator
+                  name="viewAsSeparator1">
+            </separator>
+            <groupMarker
+                  name="additions">
+            </groupMarker>
+         </menu>
+         <action
+               class="info.evanchik.eclipse.karaf.ui.Action2"
+               id="org.eclipse.equinox.jmx.ui.action2"
+               label="&amp;Default View"
+               menubarPath="jmxclient.ui.viewAs/viewAsGroup">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.equinox.jmx.ui.jmxServerActionMenu"
+            objectClass="org.eclipse.equinox.jmx.client.JMXServiceDescriptor">
+         <action
+               class="org.eclipse.equinox.jmx.client.Action1"
+               id="org.eclipse.equinox.jmx.client.disconnectAction"
+               label="&amp;Disconnect">
+         </action>
+         <action
+               class="org.eclipse.equinox.jmx.client.Action2"
+               id="org.eclipse.equinox.jmx.client.removeAction"
+               label="&amp;Remove">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.eclipse.equinox.jmx.client.jmxServerManagement"
+            targetID="org.eclipse.equinox.jmx.client.ui.jmxserversView">
+         <action
+               class="org.eclipse.equinox.jmx.internal.client.ui.actions.NewJmxServerAction"
+               id="org.eclipse.equinox.jmx.client.newJmxServerAction"
+               label="&amp;Add"
+               menubarPath="additions"
+               style="push"
+               tooltip="Add a JMX Server">
+         </action>
+      </viewContribution>
    </extension>
   
  </plugin>

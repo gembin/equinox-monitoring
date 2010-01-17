@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Compile org.eclipse.equinox.jmx.server.feature" default="main">
+	<target name="main">
+		<ant antfile="build.xml" dir="../org.eclipse.equinox.jmx.server" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.swt.jmx" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.osgi.jmx" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.equinox.registry.jmx" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.equinox.preferences.jmx" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.equinox.jmx.vm" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.equinox.jmx.server.rmi" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.core.resources.jmx" target="build.jars"/>
+	</target>
+</project>

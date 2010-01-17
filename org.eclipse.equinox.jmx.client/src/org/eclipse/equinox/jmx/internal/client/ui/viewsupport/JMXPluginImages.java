@@ -10,9 +10,10 @@
  *******************************************************************************/
 package org.eclipse.equinox.jmx.internal.client.ui.viewsupport;
 
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
+
 import java.net.URL;
 import org.eclipse.core.runtime.*;
-import org.eclipse.equinox.jmx.internal.client.Activator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
@@ -38,7 +39,7 @@ public class JMXPluginImages {
 	public static final ImageDescriptor IMGDESC_OVR_BUNDLE_RESOLVED = create("mb/", "ovr_bundle_resolved.gif", true); //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static Image createManaged(IPath path, String name) {
-		ImageDescriptor desc = createImageDescriptor(Activator.getDefault().getBundle(), path.append(name), true);
+		ImageDescriptor desc = createImageDescriptor(JMXClientPlugin.getDefault().getBundle(), path.append(name), true);
 		if (registry == null) {
 			registry = new ImageRegistry();
 		}
@@ -62,6 +63,6 @@ public class JMXPluginImages {
 
 	private static ImageDescriptor create(String prefix, String name, boolean useMissingImageDescriptor) {
 		IPath path = ICONS_PATH.append(prefix).append(name);
-		return createImageDescriptor(Activator.getDefault().getBundle(), path, useMissingImageDescriptor);
+		return createImageDescriptor(JMXClientPlugin.getDefault().getBundle(), path, useMissingImageDescriptor);
 	}
 }

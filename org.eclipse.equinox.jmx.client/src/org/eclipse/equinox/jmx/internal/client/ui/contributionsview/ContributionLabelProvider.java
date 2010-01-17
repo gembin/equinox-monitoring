@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
 import org.eclipse.equinox.jmx.common.ContributionProxy;
 import org.eclipse.equinox.jmx.common.ContributionProxyMBean;
 import org.eclipse.equinox.jmx.common.util.ByteArrayHolder;
-import org.eclipse.equinox.jmx.internal.client.Activator;
 import org.eclipse.equinox.jmx.internal.client.ui.util.ByteImageRegistry;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.graphics.Image;
@@ -28,9 +28,9 @@ import org.eclipse.swt.graphics.Image;
  */
 public class ContributionLabelProvider implements ILabelProvider {
 
-	private ArrayList labelDecorators;
-	private BundleStatusLabelDecorator bundleStatusDecorator = new BundleStatusLabelDecorator();
-	private ByteImageRegistry imageRegistry = new ByteImageRegistry();
+	private ArrayList<ILabelDecorator> labelDecorators;
+	private final BundleStatusLabelDecorator bundleStatusDecorator = new BundleStatusLabelDecorator();
+	private final ByteImageRegistry imageRegistry = new ByteImageRegistry();
 
 	public ContributionLabelProvider() {
 		addLabelDecorator(bundleStatusDecorator);
@@ -41,7 +41,7 @@ public class ContributionLabelProvider implements ILabelProvider {
 	 */
 	public void addLabelDecorator(ILabelDecorator decorator) {
 		if (labelDecorators == null) {
-			labelDecorators = new ArrayList(2);
+			labelDecorators = new ArrayList<ILabelDecorator>(2);
 		}
 		labelDecorators.add(decorator);
 	}
@@ -57,7 +57,7 @@ public class ContributionLabelProvider implements ILabelProvider {
 				try {
 					return decorateImage(imageRegistry.getImage(imageData), element);
 				} catch (IOException e) {
-					Activator.log(e);
+					JMXClientPlugin.log(e);
 				}
 			}
 		}
@@ -82,6 +82,7 @@ public class ContributionLabelProvider implements ILabelProvider {
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */
 	public void addListener(ILabelProviderListener listener) {
+		// Intentionally left blank
 	}
 
 	/* (non-Javadoc)
@@ -103,6 +104,7 @@ public class ContributionLabelProvider implements ILabelProvider {
 	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
 	 */
 	public void removeListener(ILabelProviderListener listener) {
+		// Intentionally left blank
 	}
 
 	protected String decorateText(String text, Object element) {

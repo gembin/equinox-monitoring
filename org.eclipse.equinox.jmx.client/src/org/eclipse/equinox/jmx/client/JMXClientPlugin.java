@@ -8,12 +8,14 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.equinox.jmx.internal.client;
+package org.eclipse.equinox.jmx.client;
 
 import java.util.StringTokenizer;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.jmx.common.JMXConstants;
+import org.eclipse.equinox.jmx.internal.client.JMXServiceManager;
+import org.eclipse.equinox.jmx.internal.client.JMXTransportRegistry;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -22,7 +24,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator for this bundle.
  */
-public class Activator extends AbstractUIPlugin {
+public class JMXClientPlugin extends AbstractUIPlugin {
 
 	public static final String PI_NAMESPACE = "org.eclipse.equinox.jmx.client"; //$NON-NLS-1$
 	public static final String PT_TRANSPORT = "transport"; //$NON-NLS-1$
@@ -32,28 +34,40 @@ public class Activator extends AbstractUIPlugin {
 	static final String DELIM = ":"; //$NON-NLS-1$
 
 	//The shared instance.
-	private static Activator singleton;
+	private static JMXClientPlugin singleton;
+
+	private JMXServiceManager jmxServiceManager;
+
+	private JMXTransportRegistry jmxTransportRegistry;
 
 	/**
 	 * The constructor.
 	 */
-	public Activator() {
+	public JMXClientPlugin() {
 		singleton = this;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
+		jmxServiceManager = new JMXServiceManager();
+		jmxTransportRegistry = new JMXTransportRegistry();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		singleton = null;
+
+		jmxServiceManager = null;
+		jmxTransportRegistry = null;
 	}
 
 	/**
@@ -61,7 +75,7 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance.
 	 */
-	public static Activator getDefault() {
+	public static JMXClientPlugin getDefault() {
 		return singleton;
 	}
 
@@ -78,7 +92,7 @@ public class Activator extends AbstractUIPlugin {
 
 	/**
 	 * Log to this bundle's log file.
-	 * 
+	 *
 	 * @param message The message to log.
 	 * @param exception The exception to log.
 	 * @param iStatusSeverity The <code>IStatus</code> severity level.
@@ -90,7 +104,7 @@ public class Activator extends AbstractUIPlugin {
 	/**
 	 * Logs the message to this bundle's log file with
 	 * status <code>IStatus.ERROR</code>.
-	 * 
+	 *
 	 * @param message The message to log.
 	 * @param exception The thrown exception.
 	 */
@@ -101,20 +115,21 @@ public class Activator extends AbstractUIPlugin {
 	/**
 	 * Logs the message to this bundle's log file with
 	 * status <code>IStatus.ERROR</code>.
-	 * 
+	 *
 	 * @param exception The thrown exception.
 	 */
 	public static void logError(Throwable exception) {
 		String message = exception.getMessage();
-		if (message == null)
+		if (message == null) {
 			message = "Exception occurred.";
+		}
 		log(message, exception, IStatus.ERROR);
 	}
 
 	/**
 	 * Logs the message to this bundle's log file with
 	 * status <code>IStatus.INFO</code>.
-	 * 
+	 *
 	 * @param message The message to log.
 	 */
 	public static void log(String message) {
@@ -124,11 +139,31 @@ public class Activator extends AbstractUIPlugin {
 	/**
 	 * Logs the throwable to this bundle's log file with
 	 * status <code>IStatus.INFO</code>.
-	 * 
+	 *
 	 * @param exception The thrown exception.
 	 */
 	public static void log(Throwable exception) {
 		logError(exception.getMessage(), exception);
+	}
+
+	/**
+	 * Getter for the {@link IJMXServiceManager} implementation. There is only
+	 * one per plugin instance.
+	 *
+	 * @return the {@code IJMXServiceManager} instance
+	 */
+	public IJMXServiceManager getJMXServiceManager() {
+		return jmxServiceManager;
+	}
+
+	/**
+	 * Getter for the {@link IJMXTransportRegistry} implementation. There is
+	 * only on per plugin instance.
+	 *
+	 * @return the {@link IJMXTransportRegistry} instance
+	 */
+	public IJMXTransportRegistry getJMXTransportRegistry() {
+		return jmxTransportRegistry;
 	}
 
 	public String[] getConnectionPreference() {
@@ -159,6 +194,7 @@ public class Activator extends AbstractUIPlugin {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#initializeDefaultPreferences(org.eclipse.jface.preference.IPreferenceStore)
 	 */
+	@Override
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		store.setDefault(CONNECTION_PREFERENCE_NAME, "service:jmx:rmi:///jndi/rmi://127.0.0.1:8118/" + JMXConstants.DEFAULT_DOMAIN);
 	}
