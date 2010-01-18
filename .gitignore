@@ -1,0 +1,4 @@
+bin/*
+.svn/*
+CVS/*
+target/*
