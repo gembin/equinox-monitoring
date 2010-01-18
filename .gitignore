@@ -1,4 +1,5 @@
-bin/*
-.svn/*
-CVS/*
-target/*
+*/bin/*
+*/.svn/*
+*/CVS/*
+*/target/*
+*/.settings/*
