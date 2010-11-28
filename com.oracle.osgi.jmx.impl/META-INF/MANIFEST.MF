@@ -27,8 +27,8 @@ Implementation-Vendor: com.oracle
 Implementation-Title: JMX Command and Control Framework for OSGi Implementation
 Built-By: evanchsa
 Implementation-Vendor-Id: com.oracle
-Export-Package: com.oracle.osgi.jmx,
- com.oracle.osgi.jmx.compendium,
- com.oracle.osgi.jmx.core
+Export-Package: com.oracle.osgi.jmx;version="1.0.0.r6125-patched",
+ com.oracle.osgi.jmx.compendium;version="1.0.0.r6125-patched",
+ com.oracle.osgi.jmx.core;version="1.0.0.r6125-patched"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

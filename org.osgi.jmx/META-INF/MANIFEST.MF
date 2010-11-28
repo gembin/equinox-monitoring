@@ -3,16 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: org.osgi.jmx
 Bundle-SymbolicName: org.osgi.jmx
 Bundle-Version: 1.0.0.r6125-patched
-Export-Package: org.osgi.jmx;version="1.0.0",
- org.osgi.jmx.codec;version="1.0.0";
+Export-Package: org.osgi.jmx;version="1.0.0.r6125-patched",
+ org.osgi.jmx.codec;version="1.0.0.r6125-patched";
   uses:="org.osgi.service.startlevel,
    org.apache.commons.logging,
    org.osgi.jmx.core,
    org.osgi.jmx.compendium,
    org.osgi.framework,
    org.osgi.service.packageadmin",
- org.osgi.jmx.compendium;version="1.0.0",
- org.osgi.jmx.core;version="1.0.0"
+ org.osgi.jmx.compendium;version="1.0.0.r6125-patched",
+ org.osgi.jmx.core;version="1.0.0.r6125-patched"
 Built-By: evanchsa
 DynamicImport-Package: javax.management,javax.management.openmbean,org.osgi.service.cm,org.osgi.service.permissionadmin,org.osgi.service.provisioning,org.osgi.service.useradmin
 Build-Jdk: 1.6.0_0
