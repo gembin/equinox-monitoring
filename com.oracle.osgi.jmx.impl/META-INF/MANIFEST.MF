@@ -1,27 +1,34 @@
 Manifest-Version: 1.0
-Private-Package: com.oracle.osgi.jmx,com.oracle.osgi.jmx.compendium,co
- m.oracle.osgi.jmx.core
-Implementation-Title: JMX Command and Control Framework for OSGi Imple
- mentation
-Implementation-Version: 1.0-r6125-patched
-Built-By: evanchsa
-Tool: Bnd-0.0.238
-Bundle-Name: jmx-impl
-Created-By: Apache Maven Bundle Plugin
-Implementation-Vendor: com.oracle
-DynamicImport-Package: javax.management,javax.management.openmbean,org
- .osgi.service.cm,org.osgi.service.permissionadmin,org.osgi.service.pr
- ovisioning,org.osgi.service.useradmin
-Implementation-Vendor-Id: com.oracle
-Build-Jdk: 1.6.0_0
-Bundle-Version: 1.0.0.r6125-patched
-Bnd-LastModified: 1263774415152
 Bundle-ManifestVersion: 2
-Bundle-Activator: com.oracle.osgi.jmx.Activator
-Import-Package: org.apache.commons.logging,org.osgi.framework;version=
- "1.3",org.osgi.jmx.codec,org.osgi.jmx.compendium,org.osgi.jmx.core,or
- g.osgi.service.packageadmin;version="1.2",org.osgi.service.startlevel
- ;version="1.0",org.osgi.util.tracker;version="1.3"
+Bundle-Name: com.oracle.osgi.jmx
 Bundle-SymbolicName: com.oracle.osgi.jmx
+Bundle-Version: 1.0.0.r6125-patched
+Bundle-Activator: com.oracle.osgi.jmx.Activator
+Import-Package: org.apache.commons.logging,
+ org.osgi.framework;version="1.3",
+ org.osgi.jmx.codec,
+ org.osgi.jmx.compendium,
+ org.osgi.jmx.core,
+ org.osgi.service.cm;version="1.2.0",
+ org.osgi.service.packageadmin;version="1.2",
+ org.osgi.service.provisioning;version="1.2.0",
+ org.osgi.service.startlevel;version="1.0",
+ org.osgi.service.useradmin;version="1.1.0",
+ org.osgi.util.tracker;version="1.3"
+Build-Jdk: 1.6.0_0
+Bnd-LastModified: 1263774415152
+Implementation-Version: 1.0-r6125-patched
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: javax.management,javax.management.openmbean,org.osgi.service.cm,org.osgi.service.permissionadmin,org.osgi.service.provisioning,org.osgi.service.useradmin
+Private-Package: com.oracle.osgi.jmx,com.oracle.osgi.jmx.compendium,com.oracle.osgi.jmx.core
 Archiver-Version: Plexus Archiver
-
+Tool: Bnd-0.0.238
+Implementation-Vendor: com.oracle
+Implementation-Title: JMX Command and Control Framework for OSGi Implementation
+Built-By: evanchsa
+Implementation-Vendor-Id: com.oracle
+Export-Package: com.oracle.osgi.jmx,
+ com.oracle.osgi.jmx.compendium,
+ com.oracle.osgi.jmx.core
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy

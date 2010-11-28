@@ -47,9 +47,6 @@ public class JMXClientPlugin extends AbstractUIPlugin {
 		singleton = this;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -58,9 +55,6 @@ public class JMXClientPlugin extends AbstractUIPlugin {
 		jmxTransportRegistry = new JMXTransportRegistry();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
@@ -191,9 +185,6 @@ public class JMXClientPlugin extends AbstractUIPlugin {
 		getPreferenceStore().setValue(CONNECTION_PREFERENCE_NAME, sbuf.toString());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#initializeDefaultPreferences(org.eclipse.jface.preference.IPreferenceStore)
-	 */
 	@Override
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		store.setDefault(CONNECTION_PREFERENCE_NAME, "service:jmx:rmi:///jndi/rmi://127.0.0.1:8118/" + JMXConstants.DEFAULT_DOMAIN);

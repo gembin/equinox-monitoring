@@ -3,9 +3,6 @@
 <plugin>
 	<extension-point id="contribution" name="Contribution" schema="schema/contribution.exsd"/>
 	<extension-point id="provider" name="provider" schema="schema/provider.exsd"/>
-	<extension point="org.eclipse.ui.startup">
-		<startup class="org.eclipse.equinox.jmx.internal.server.UIStarter"/>
-	</extension>
 	<extension
 			id="application"
 			point="org.eclipse.core.runtime.applications">
